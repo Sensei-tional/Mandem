@@ -5,6 +5,7 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Bullet.h"
 #include "CoreGlobals.h"
 
 // Sets default values
@@ -30,6 +31,7 @@ void APlayerCharacter::InputInteract()
 void APlayerCharacter::InputShoot()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Shoot button pressed");
+	/*GetWorld()->SpawnActor < (ABullet, GetActorLocation(), GetActorForwardVector());*/
 }
 
 //Define Special function
