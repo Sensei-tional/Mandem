@@ -20,16 +20,43 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+//Define Interact function
 void APlayerCharacter::InputInteract()
 {
-	//Define Interact function
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Interact Button Pressed");
-	UE_LOG(LogTemp, Warning, TEXT("Interact Button Pressed"));
 }
 
+//Define Shoot function
+void APlayerCharacter::InputShoot()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Shoot button pressed");
+}
+
+//Define Special function
+void APlayerCharacter::InputSpecial()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Special shoot button pressed");
+}
+
+//Define Input Function
 void APlayerCharacter::InputMove(const FInputActionValue& Value)
 {
+	//Test Input
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Input moved");
 	
+	//Grab and utilize vector
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+	AddMovementInput(GetActorForwardVector(), MovementVector.X);
+	AddMovementInput(GetActorRightVector(), MovementVector.Y);
+}
+
+//Define Rotate Funtion
+void APlayerCharacter::InputRotate(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Rotation Moved");
+
+	const FVector2D RotationVector = Value.Get<FVector2D>();
+	AddControllerYawInput(RotationVector.Y);
 }
 
 // Called every frame
@@ -54,9 +81,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		}
 	}
 
+	//Check inputs for character player
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		Input->BindAction(Interact, ETriggerEvent::Triggered, this, &APlayerCharacter::InputInteract);
 		Input->BindAction(Move, ETriggerEvent::Triggered, this, &APlayerCharacter::InputMove);
+		Input->BindAction(Rotate, ETriggerEvent::Triggered, this, &APlayerCharacter::InputRotate);
+		Input->BindAction(Shoot, ETriggerEvent::Triggered, this, & APlayerCharacter::InputShoot);
+		Input->BindAction(Special, ETriggerEvent::Triggered, this, &APlayerCharacter::InputSpecial);
 	}
 }

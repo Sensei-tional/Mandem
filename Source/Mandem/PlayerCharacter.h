@@ -30,8 +30,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* Move;
 
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* Rotate;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* Shoot;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* Special;
+
 	void InputInteract();
+	void InputShoot();
+	void InputSpecial();
 	void InputMove(const FInputActionValue& Value);
+	void InputRotate(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
