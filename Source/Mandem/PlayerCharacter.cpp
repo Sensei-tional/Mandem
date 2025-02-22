@@ -1,17 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Mandem/PlayerCharacter.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "Bullet.h"
 #include "CoreGlobals.h"
 
-// Sets default values
-APlayerCharacter::APlayerCharacter()
+//Constuctor
+APlayerCharacter::APlayerCharacter() 
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -19,6 +16,12 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+// Called every frame
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 //Define Interact function
@@ -48,23 +51,20 @@ void APlayerCharacter::InputMove(const FInputActionValue& Value)
 	
 	//Grab and utilize vector
 	const FVector2D MovementVector = Value.Get<FVector2D>();
-	AddMovementInput(GetActorForwardVector(), MovementVector.X);
-	AddMovementInput(GetActorRightVector(), MovementVector.Y);
+	AddMovementInput(GetActorLocation().XAxisVector, MovementVector.X);
+	AddMovementInput(GetActorLocation().YAxisVector, MovementVector.Y);
 }
 
-//Define Rotate Funtion
 void APlayerCharacter::InputRotate(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Rotation Moved");
+	FVector2D LookDirection = Value.Get<FVector2D>();
 
-	const FVector2D RotationVector = Value.Get<FVector2D>();
-	AddControllerYawInput(RotationVector.Y);
-}
-
-// Called every frame
-void APlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	if (LookDirection.SizeSquared() > 0.05f)
+	{
+		float TargetDirection = FMath::Atan2(LookDirection.Y, LookDirection.X) * (180.0f / PI);
+		FRotator NewDirection = FRotator(0, TargetDirection, 0);
+		GetController()->SetControlRotation(NewDirection);
+	}
 }
 
 // Called to bind functionality to input
@@ -88,8 +88,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		Input->BindAction(Interact, ETriggerEvent::Triggered, this, &APlayerCharacter::InputInteract);
 		Input->BindAction(Move, ETriggerEvent::Triggered, this, &APlayerCharacter::InputMove);
-		Input->BindAction(Rotate, ETriggerEvent::Triggered, this, &APlayerCharacter::InputRotate);
 		Input->BindAction(Shoot, ETriggerEvent::Triggered, this, & APlayerCharacter::InputShoot);
 		Input->BindAction(Special, ETriggerEvent::Triggered, this, &APlayerCharacter::InputSpecial);
+		Input->BindAction(Rotate, ETriggerEvent::Triggered, this, &APlayerCharacter::InputRotate);
+		
 	}
 }
