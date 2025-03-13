@@ -27,20 +27,24 @@ protected:
 	class UInputAction* Interact;
 
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* Reload;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	class UInputAction* Shoot;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* Move;
 
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* Rotate;
 
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
-	class UInputAction* Shoot;
-
-	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	class UInputAction* Special;
 
 	void InputInteract();
-	void InputShoot();
 	void InputSpecial();
+	void InputShoot();
+	void InputReload();
 	void InputMove(const FInputActionValue& Value);
 	void InputRotate(const FInputActionValue& Value);
 

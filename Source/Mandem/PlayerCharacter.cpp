@@ -30,17 +30,20 @@ void APlayerCharacter::InputInteract()
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Interact Button Pressed");
 }
 
-//Define Shoot function
-void APlayerCharacter::InputShoot()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Shoot button pressed");
-	/*GetWorld()->SpawnActor < (ABullet, GetActorLocation(), GetActorForwardVector());*/
-}
-
 //Define Special function
 void APlayerCharacter::InputSpecial()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Special shoot button pressed");
+}
+
+void APlayerCharacter::InputShoot()
+{
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Shoot Pressed");
+}
+
+void APlayerCharacter::InputReload()
+{
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Reload Pressed");
 }
 
 //Define Input Function
@@ -61,10 +64,12 @@ void APlayerCharacter::InputRotate(const FInputActionValue& Value)
 
 	if (LookDirection.SizeSquared() > 0.05f)
 	{
-		float TargetDirection = FMath::Atan2(LookDirection.Y, LookDirection.X) * (180.0f / PI);
+		float TargetDirection = FMath::Atan2(LookDirection.X, LookDirection.Y) * (180.0f / PI);
 		FRotator NewDirection = FRotator(0, TargetDirection, 0);
 		GetController()->SetControlRotation(NewDirection);
 	}
+	
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, LookDirection.ToString());
 }
 
 // Called to bind functionality to input
@@ -88,9 +93,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		Input->BindAction(Interact, ETriggerEvent::Triggered, this, &APlayerCharacter::InputInteract);
 		Input->BindAction(Move, ETriggerEvent::Triggered, this, &APlayerCharacter::InputMove);
-		Input->BindAction(Shoot, ETriggerEvent::Triggered, this, & APlayerCharacter::InputShoot);
 		Input->BindAction(Special, ETriggerEvent::Triggered, this, &APlayerCharacter::InputSpecial);
 		Input->BindAction(Rotate, ETriggerEvent::Triggered, this, &APlayerCharacter::InputRotate);
-		
+		Input->BindAction(Shoot, ETriggerEvent::Triggered, this, &APlayerCharacter::InputShoot);
+		Input->BindAction(Reload, ETriggerEvent::Triggered, this, &APlayerCharacter::InputReload);
 	}
 }
