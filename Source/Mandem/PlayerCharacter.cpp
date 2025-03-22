@@ -39,6 +39,8 @@ void APlayerCharacter::InputSpecial()
 void APlayerCharacter::InputShoot()
 {
 	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, "Shoot Pressed");
+
+	
 }
 
 void APlayerCharacter::InputReload()
